@@ -472,7 +472,7 @@ pub trait Statement: AsHandle {
         parameter: &(impl HasDataType + CData + ?Sized ),
     ) -> SqlResult<()> {
         let parameter_type = parameter.data_type();
-        println!("xxxx odbc-api bind input parameter:{:?},{:?},{:?},{:?}",parameter_type,parameter_number,parameter.buffer_length(),parameter.value_ptr());
+        println!("xxxx odbc-api bind input parameter:{:?},{:?},{:?},{:?}",parameter_type,parameter_number,parameter.buffer_length(),*parameter.value_ptr());
         SQLBindParameter(
             self.as_sys(),
             parameter_number,
