@@ -9,7 +9,7 @@ use super::{ColumnBuffer, ColumnProjections, Indicator};
 
 use log::debug;
 use odbc_sys::{CDataType, NULL_DATA};
-use std::{cmp::min, ffi::c_void, mem::size_of, panic};
+use std::{cmp::min, ffi::c_void, mem::size_of, panic, fmt::Debug};
 use widestring::U16Str;
 
 /// A column buffer for character data. The actual encoding used may depend on your system locale.
@@ -196,9 +196,10 @@ impl<C> TextColumn<C> {
     /// allowed element length. `input` must be specified without the terminating zero.
     pub fn set_value(&mut self, index: usize, input: Option<&[C]>)
     where
-        C: Default + Copy,
+        C: Default + Copy + Debug,
     {
         if let Some(input) = input {
+            println!("xxxx odbc api text set value:{:?}",input);
             self.set_mut(index, input.len()).copy_from_slice(input);
         } else {
             self.indicators[index] = NULL_DATA;

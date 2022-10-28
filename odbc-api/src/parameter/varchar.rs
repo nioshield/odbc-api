@@ -53,6 +53,8 @@ impl VarCharBox {
 
     /// Create an owned parameter containing the character data from the passed string.
     pub fn from_string(val: String) -> Self {
+        let v1 = val.clone();
+        println!("xxxx odbc api varchar box:{:?},{:?}",v1,v1.as_bytes());
         Self::from_vec(val.into_bytes())
     }
 
