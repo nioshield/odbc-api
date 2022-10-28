@@ -15,7 +15,7 @@ use odbc_sys::{
     SQLFreeStmt, SQLGetData, SQLNumResultCols, SQLParamData, SQLPutData, SQLRowCount, SqlDataType,
     SqlReturn, StatementAttribute, IS_POINTER,
 };
-use std::{ffi::c_void, marker::PhantomData, mem::ManuallyDrop, ptr::null_mut};
+use std::{ffi::c_void, marker::PhantomData, mem::ManuallyDrop, ptr::null_mut, fmt::Debug};
 
 #[cfg(feature = "narrow")]
 use odbc_sys::{
@@ -469,9 +469,10 @@ pub trait Statement: AsHandle {
     unsafe fn bind_input_parameter(
         &mut self,
         parameter_number: u16,
-        parameter: &(impl HasDataType + CData + ?Sized),
+        parameter: &(impl HasDataType + CData + ?Sized + Debug),
     ) -> SqlResult<()> {
         let parameter_type = parameter.data_type();
+        println!("xxxx odbc-api bind input parameter:{:?},{:?},{:?},{:?}",parameter_type,parameter_number,parameter.buffer_length(),parameter);
         SQLBindParameter(
             self.as_sys(),
             parameter_number,

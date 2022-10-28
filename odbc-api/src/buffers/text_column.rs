@@ -196,7 +196,7 @@ impl<C> TextColumn<C> {
     /// allowed element length. `input` must be specified without the terminating zero.
     pub fn set_value(&mut self, index: usize, input: Option<&[C]>)
     where
-        C: Default + Copy + Debug,
+        C: Default + Copy,
     {
         if let Some(input) = input {
             self.set_mut(index, input.len()).copy_from_slice(input);
