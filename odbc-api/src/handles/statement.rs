@@ -15,8 +15,7 @@ use odbc_sys::{
     SQLFreeStmt, SQLGetData, SQLNumResultCols, SQLParamData, SQLPutData, SQLRowCount, SqlDataType,
     SqlReturn, StatementAttribute, IS_POINTER,
 };
-use std::{ffi::c_void, marker::PhantomData, mem::ManuallyDrop, ptr::null_mut, fmt::Debug};
-
+use std::{ffi::{c_void, CStr}, marker::PhantomData, mem::ManuallyDrop, ptr::null_mut, fmt::Debug};
 #[cfg(feature = "narrow")]
 use odbc_sys::{
     SQLColAttribute as sql_col_attribute, SQLColumns as sql_columns,
@@ -472,7 +471,11 @@ pub trait Statement: AsHandle {
         parameter: &(impl HasDataType + CData + ?Sized ),
     ) -> SqlResult<()> {
         let parameter_type = parameter.data_type();
-        println!("xxxx odbc-api bind input parameter:{:?},{:?},{:?},{:?}",parameter_type,parameter_number,parameter.buffer_length(),*parameter.value_ptr());
+
+        let ptr = parameter.value_ptr();
+        let abc = CStr::from_ptr(ptr as *const _).to_string_lossy();
+        println!("xxxx odbc-api bind input parameter:{:?},{:?},{:?},{:?}",parameter_type,parameter_number,parameter.buffer_length(),abc);
+
         SQLBindParameter(
             self.as_sys(),
             parameter_number,
