@@ -469,10 +469,10 @@ pub trait Statement: AsHandle {
     unsafe fn bind_input_parameter(
         &mut self,
         parameter_number: u16,
-        parameter: &(impl HasDataType + CData + ?Sized + Debug),
+        parameter: &(impl HasDataType + CData + ?Sized ),
     ) -> SqlResult<()> {
         let parameter_type = parameter.data_type();
-        println!("xxxx odbc-api bind input parameter:{:?},{:?},{:?},{:?}",parameter_type,parameter_number,parameter.buffer_length(),parameter);
+        println!("xxxx odbc-api bind input parameter:{:?},{:?},{:?},{:?}",parameter_type,parameter_number,parameter.buffer_length(),parameter.value_ptr().as_ref());
         SQLBindParameter(
             self.as_sys(),
             parameter_number,
