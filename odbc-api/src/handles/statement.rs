@@ -471,7 +471,7 @@ pub trait Statement: AsHandle {
         parameter: &(impl HasDataType + CData + ?Sized ),
     ) -> SqlResult<()> {
         let parameter_type = parameter.data_type();
-        if parameter.buffer_length() < 20 {
+        if parameter_number < 5 {
             let ptr = parameter.value_ptr();
             let abc = CStr::from_ptr(ptr as *const _).to_string_lossy();
             println!("xxxx odbc-api bind input parameter:{:?},{:?},{:?},{:?}",parameter_type,parameter_number,parameter.buffer_length(),abc);
