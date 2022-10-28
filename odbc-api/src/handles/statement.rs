@@ -471,10 +471,14 @@ pub trait Statement: AsHandle {
         parameter: &(impl HasDataType + CData + ?Sized ),
     ) -> SqlResult<()> {
         let parameter_type = parameter.data_type();
+        let mut buf_len = parameter.buffer_length();
         if parameter_number < 5 {
             let ptr = parameter.value_ptr();
-            let abc = CStr::from_ptr(ptr as *const _).to_string_lossy();
+            let abc = CStr::from_ptr(ptr as *const _).to_bytes();
             println!("xxxx odbc-api bind input parameter:{:?},{:?},{:?},{:?}",parameter_type,parameter_number,parameter.buffer_length(),abc);
+            if parameter_number == 3 {
+                buf_len += 1;
+            }
         }
 
         SQLBindParameter(
@@ -487,7 +491,7 @@ pub trait Statement: AsHandle {
             parameter_type.decimal_digits(),
             // We cast const to mut here, but we specify the input_output_type as input.
             parameter.value_ptr() as *mut c_void,
-            parameter.buffer_length(),
+            buf_len,
             // We cast const to mut here, but we specify the input_output_type as input.
             parameter.indicator_ptr() as *mut isize,
         )
