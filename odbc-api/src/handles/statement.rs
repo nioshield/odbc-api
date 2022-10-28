@@ -473,11 +473,14 @@ pub trait Statement: AsHandle {
         let parameter_type = parameter.data_type();
         let mut buf_len = parameter.buffer_length();
         if parameter_number < 5 {
-            let ptr = parameter.value_ptr();
-            let abc = CStr::from_ptr(ptr as *const _).to_bytes();
-            println!("xxxx odbc-api bind input parameter:{:?},{:?},{:?},{:?}",parameter_type,parameter_number,parameter.buffer_length(),abc);
+            let val_ptr = parameter.value_ptr();
+            let value_byte = CStr::from_ptr(val_ptr as *const _).to_bytes();
+            let ind_ptr = parameter.indicator_ptr();
+            let ind_val = CStr::from_ptr(ind_ptr as *const _).to_bytes();
+            println!("xxxx odbc-api bind input parameter:{:?},parms_num:{:?},buff_len:{:?},value:{:?},indicator:{:?}",parameter_type,parameter_number,parameter.buffer_length(),value_byte,ind_val);
             if parameter_number == 3 {
                 buf_len += 1;
+                println!("xxxx odbc-api bind input parameter: in parms_num:3 buf_len += 1 : {:?}",buf_len); 
             }
         }
 
