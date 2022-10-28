@@ -199,7 +199,6 @@ impl<C> TextColumn<C> {
         C: Default + Copy + Debug,
     {
         if let Some(input) = input {
-            println!("xxxx odbc api text set value:{:?}",input);
             self.set_mut(index, input.len()).copy_from_slice(input);
         } else {
             self.indicators[index] = NULL_DATA;
