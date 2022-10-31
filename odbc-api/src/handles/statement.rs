@@ -499,7 +499,7 @@ pub trait Statement: AsHandle {
             parameter_type.decimal_digits(),
             // We cast const to mut here, but we specify the input_output_type as input.
             //parameter.value_ptr() as *mut c_void,
-            value_ptr,
+            value_ptr as *mut c_void,
             buf_len,
             // We cast const to mut here, but we specify the input_output_type as input.
             parameter.indicator_ptr() as *mut isize,
