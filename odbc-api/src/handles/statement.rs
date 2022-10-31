@@ -479,8 +479,8 @@ pub trait Statement: AsHandle {
             let ind_val = CStr::from_ptr(ind_ptr as *const _).to_bytes();
             println!("xxxx odbc-api bind input parameter:{:?},parms_num:{:?},buff_len:{:?},value:{:?},indicator:{:?}",parameter_type,parameter_number,parameter.buffer_length(),value_byte,ind_val);
             if parameter_number == 3 {
-                buf_len += 1;
-                println!("xxxx odbc-api bind input parameter: in parms_num:3 buf_len += 1 : {:?}",buf_len); 
+                buf_len -= 2;
+                println!("xxxx odbc-api bind input parameter: in parms_num:3 buf_len -= 2 : {:?}",buf_len); 
             }
         }
 
