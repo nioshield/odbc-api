@@ -472,13 +472,17 @@ pub trait Statement: AsHandle {
     ) -> SqlResult<()> {
         let parameter_type = parameter.data_type();
         let mut buf_len = parameter.buffer_length();
+        let mut value_ptr =parameter.value_ptr(); 
         if parameter_number < 5 {
             let val_ptr = parameter.value_ptr();
-            let value_byte = CStr::from_ptr(val_ptr as *const _).to_bytes();
+            let value_byte = CStr::from_ptr(val_ptr as *const _).to_bytes_with_nul();
+            let mut value1 = value_byte.to_vec().clone();
+            value_ptr = value1.as_mut_ptr() as *mut c_void;
             let ind_ptr = parameter.indicator_ptr();
             let ind_val = CStr::from_ptr(ind_ptr as *const _).to_bytes();
             println!("xxxx odbc-api bind input parameter:{:?},parms_num:{:?},buff_len:{:?},value:{:?},indicator:{:?}",parameter_type,parameter_number,parameter.buffer_length(),value_byte,ind_val);
             println!("xxxx odbc-api bind input parameter column_size:{:?}, decimal_digits:{:?}",parameter_type.column_size(),parameter_type.decimal_digits());
+            println!("xxxx odbc-api bind input parameter old val ptr:{:?}, new ptr:{:?}",val_ptr,value_ptr);
             if parameter_number == 3 {
                 buf_len -= 2;
                 println!("xxxx odbc-api bind input parameter: in parms_num:3 buf_len -= 2 : {:?}",buf_len); 
@@ -494,7 +498,8 @@ pub trait Statement: AsHandle {
             parameter_type.column_size(),
             parameter_type.decimal_digits(),
             // We cast const to mut here, but we specify the input_output_type as input.
-            parameter.value_ptr() as *mut c_void,
+            //parameter.value_ptr() as *mut c_void,
+            value_ptr,
             buf_len,
             // We cast const to mut here, but we specify the input_output_type as input.
             parameter.indicator_ptr() as *mut isize,
