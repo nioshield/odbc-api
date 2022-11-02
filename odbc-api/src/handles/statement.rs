@@ -476,17 +476,17 @@ pub trait Statement: AsHandle {
         if parameter_number < 5 {
             let val_ptr = parameter.value_ptr();
             let value_byte = CStr::from_ptr(val_ptr as *const _).to_bytes_with_nul();
-            let mut value1 = value_byte.to_vec().clone();
-            value_ptr = value1.as_mut_ptr() as *mut c_void;
-            let ind_ptr = parameter.indicator_ptr();
-            let ind_val = CStr::from_ptr(ind_ptr as *const _).to_bytes();
-            println!("xxxx odbc-api bind input parameter:{:?},parms_num:{:?},buff_len:{:?},value:{:?},indicator:{:?}",parameter_type,parameter_number,parameter.buffer_length(),value_byte,ind_val);
-            println!("xxxx odbc-api bind input parameter column_size:{:?}, decimal_digits:{:?}",parameter_type.column_size(),parameter_type.decimal_digits());
-            println!("xxxx odbc-api bind input parameter old val ptr:{:?}, new ptr:{:?}, cdata_type:{:?}",val_ptr,value_ptr,parameter.cdata_type());
-            if parameter_number == 3 {
-                buf_len -= 2;
-                println!("xxxx odbc-api bind input parameter: in parms_num:3 buf_len -= 2 : {:?}",buf_len); 
-            }
+            // let mut value1 = value_byte.to_vec().clone();
+            // value_ptr = value1.as_mut_ptr() as *mut c_void;
+            // let ind_ptr = parameter.indicator_ptr();
+            // let ind_val = CStr::from_ptr(ind_ptr as *const _).to_bytes();
+            println!("xxxx odbc-api bind input parameter:{:?},parms_num:{:?},buff_len:{:?},value:{:?}",parameter_type,parameter_number,parameter.buffer_length(),value_byte);
+            //println!("xxxx odbc-api bind input parameter column_size:{:?}, decimal_digits:{:?}",parameter_type.column_size(),parameter_type.decimal_digits());
+            //println!("xxxx odbc-api bind input parameter old val ptr:{:?}, new ptr:{:?}, cdata_type:{:?}",val_ptr,value_ptr,parameter.cdata_type());
+            //if parameter_number == 3 {
+            //    buf_len -= 2;
+            //    println!("xxxx odbc-api bind input parameter: in parms_num:3 buf_len -= 2 : {:?}",buf_len); 
+            //}
         }
 
         SQLBindParameter(
